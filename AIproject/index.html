@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>预测页签与财务表格</title>
+    <style>
+      :root {
+        --primary: #2f6fed;
+        --primary-soft: #e8f1fb;
+        --border: #d9e2f0;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --bg: #f6f8fc;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+      .page {
+        max-width: 1200px;
+        margin: 32px auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(20, 36, 64, 0.08);
+        padding: 24px 28px 32px;
+      }
+      .title {
+        font-size: 20px;
+        margin: 0 0 18px;
+        font-weight: 600;
+      }
+      .tabs {
+        display: flex;
+        gap: 8px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 8px;
+        margin-bottom: 16px;
+      }
+      .tab-button {
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--text);
+        padding: 10px 16px;
+        border-radius: 8px 8px 0 0;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 14px;
+      }
+      .tab-button:hover {
+        background: var(--primary-soft);
+      }
+      .tab-button.active {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+      .tab-panel {
+        display: none;
+      }
+      .tab-panel.active {
+        display: block;
+      }
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 980px;
+      }
+      thead th {
+        background: var(--primary-soft);
+        color: var(--text);
+        text-align: left;
+        padding: 12px 10px;
+        border-bottom: 1px solid var(--border);
+        font-weight: 600;
+        font-size: 13px;
+      }
+      tbody td {
+        padding: 12px 10px;
+        border-bottom: 1px solid var(--border);
+        font-size: 13px;
+        color: var(--text);
+      }
+      tbody tr:nth-child(even) {
+        background: #f9fbff;
+      }
+      .num {
+        text-align: right;
+        color: var(--muted);
+      }
+      .level-1 {
+        font-weight: 600;
+      }
+      .indent {
+        padding-left: 28px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <h1 class="title">预测页签与财务指标表</h1>
+      <div class="tabs" role="tablist" aria-label="预测页签">
+        <button class="tab-button active" data-tab="tab-quarter" role="tab">
+          截止当季预测
+        </button>
+        <button class="tab-button" data-tab="tab-next-quarter" role="tab">
+          截止下季预测
+        </button>
+        <button class="tab-button" data-tab="tab-next-month" role="tab">
+          截止下月预测
+        </button>
+      </div>
+
+      <section id="tab-quarter" class="tab-panel active" role="tabpanel">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>考核项（单位：万元）</th>
+                <th>年目标</th>
+                <th>实际完成</th>
+                <th>终端整体</th>
+                <th>电商部</th>
+                <th>线下公开渠道</th>
+                <th>三营</th>
+                <th>政企中国</th>
+                <th>终端北美</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="level-1">主营业务收入</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+              </tr>
+              <tr>
+                <td class="level-1">主营业务成本</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+              </tr>
+              <tr>
+                <td class="indent">硬件成本</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="tab-next-quarter" class="tab-panel" role="tabpanel">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>考核项（单位：万元）</th>
+                <th>年目标</th>
+                <th>实际完成</th>
+                <th>终端整体</th>
+                <th>电商部</th>
+                <th>线下公开渠道</th>
+                <th>三营</th>
+                <th>政企中国</th>
+                <th>终端北美</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="level-1">主营业务收入</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+              </tr>
+              <tr>
+                <td class="level-1">主营业务成本</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+              </tr>
+              <tr>
+                <td class="indent">硬件成本</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="tab-next-month" class="tab-panel" role="tabpanel">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>考核项（单位：万元）</th>
+                <th>年目标</th>
+                <th>实际完成</th>
+                <th>终端整体</th>
+                <th>电商部</th>
+                <th>线下公开渠道</th>
+                <th>三营</th>
+                <th>政企中国</th>
+                <th>终端北美</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="level-1">主营业务收入</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+              </tr>
+              <tr>
+                <td class="level-1">主营业务成本</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+              </tr>
+              <tr>
+                <td class="indent">硬件成本</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const buttons = document.querySelectorAll(".tab-button");
+      const panels = document.querySelectorAll(".tab-panel");
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const target = button.getAttribute("data-tab");
+
+          buttons.forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+
+          panels.forEach((panel) => {
+            panel.classList.toggle("active", panel.id === target);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
