@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>智能评测系统 - 评测集示例</title>
+    <style>
+      :root {
+        --primary: #2f6fed;
+        --primary-weak: #e8f1ff;
+        --border: #d7e2f0;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --bg: #f6f8fc;
+        --danger: #d63638;
+        --success: #12a150;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+      header {
+        background: #fff;
+        border-bottom: 1px solid var(--border);
+        padding: 16px 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 18px;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 24px auto 40px;
+        padding: 0 20px;
+      }
+      .card {
+        background: #fff;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        box-shadow: 0 10px 30px rgba(20, 36, 64, 0.05);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .card h2 {
+        margin: 0 0 16px;
+        font-size: 16px;
+      }
+      .row {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 240px;
+        flex: 1;
+      }
+      label {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      input,
+      textarea,
+      select {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-size: 14px;
+      }
+      textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead th {
+        text-align: left;
+        font-size: 13px;
+        background: var(--primary-weak);
+        padding: 10px;
+        border-bottom: 1px solid var(--border);
+      }
+      tbody td {
+        padding: 10px;
+        border-bottom: 1px solid var(--border);
+        font-size: 13px;
+      }
+      tbody tr:nth-child(even) {
+        background: #f9fbff;
+      }
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+      }
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        border: 1px solid var(--border);
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: #fff;
+        color: var(--text);
+        cursor: pointer;
+        font-size: 13px;
+      }
+      .btn.primary {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+      .btn.ghost {
+        background: var(--primary-weak);
+        border-color: var(--primary-weak);
+        color: var(--primary);
+      }
+      .btn.danger {
+        background: #fff0f0;
+        border-color: #f1c4c6;
+        color: var(--danger);
+      }
+      .btn.success {
+        background: #e8f7ee;
+        border-color: #bfe6cf;
+        color: var(--success);
+      }
+      .tag {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: var(--primary-weak);
+        color: var(--primary);
+        font-size: 12px;
+      }
+      .page {
+        display: none;
+      }
+      .page.active {
+        display: block;
+      }
+      .config-row {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px;
+        margin-bottom: 12px;
+        background: #f9fbff;
+      }
+      .config-row h4 {
+        margin: 0 0 10px;
+        font-size: 14px;
+      }
+      .muted {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.35);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        z-index: 1000;
+      }
+      .modal.active {
+        display: flex;
+      }
+      .modal .dialog {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        max-width: 640px;
+        width: 100%;
+        max-height: 90vh;
+        overflow: auto;
+      }
+      .dialog h3 {
+        margin-top: 0;
+      }
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 8px;
+        display: none;
+        min-width: 140px;
+        z-index: 10;
+      }
+      .dropdown-menu button {
+        width: 100%;
+        border: none;
+        background: #fff;
+        padding: 8px;
+        text-align: left;
+        cursor: pointer;
+        border-radius: 6px;
+      }
+      .dropdown-menu button:hover {
+        background: var(--primary-weak);
+      }
+      .dropdown.open .dropdown-menu {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>智能评测系统</h1>
+      <span class="tag">评测集管理示例</span>
+    </header>
+
+    <main class="container">
+      <section id="page-list" class="page active">
+        <div class="card">
+          <div class="toolbar">
+            <h2>评测集</h2>
+            <button class="btn primary" id="btn-add-page">新增</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>评测集名称</th>
+                <th>数据项</th>
+                <th>最新版本</th>
+                <th>描述</th>
+                <th>更新时间</th>
+                <th>更新人</th>
+                <th>创建时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="dataset-table"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="page-add" class="page">
+        <div class="card">
+          <h2>新增评测集</h2>
+          <div class="row">
+            <div class="field">
+              <label>评测集名称（必填）</label>
+              <input id="add-name" placeholder="请输入评测集名称" />
+            </div>
+            <div class="field">
+              <label>描述（选填）</label>
+              <input id="add-desc" placeholder="可填写评测集说明" />
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="toolbar">
+            <h2>配置列</h2>
+            <button class="btn" id="btn-add-column">增加列</button>
+          </div>
+          <div id="column-configs"></div>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" id="btn-submit-dataset">提交</button>
+          <button class="btn" id="btn-cancel-dataset">取消</button>
+        </div>
+      </section>
+
+      <section id="page-detail" class="page">
+        <div class="card">
+          <div class="toolbar">
+            <div>
+              <h2 id="detail-title">评测集详情</h2>
+              <div class="muted" id="detail-meta"></div>
+            </div>
+            <button class="btn" id="btn-back-list">返回列表</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="toolbar">
+            <input id="filter-input" placeholder="筛选文本框" />
+            <div class="actions">
+              <button class="btn" id="btn-config-columns">配置列</button>
+              <div class="dropdown" id="add-data-dropdown">
+                <button class="btn primary">添加数据</button>
+                <div class="dropdown-menu">
+                  <button id="btn-add-manual">手工添加</button>
+                  <button id="btn-add-import">本地导入</button>
+                </div>
+              </div>
+              <button class="btn success" id="btn-submit-version">
+                提交版本
+              </button>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr id="detail-head"></tr>
+            </thead>
+            <tbody id="detail-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal" id="modal-config">
+      <div class="dialog">
+        <h3>配置列</h3>
+        <div id="modal-config-body"></div>
+        <div class="actions">
+          <button class="btn" id="btn-modal-add-column">增加列</button>
+          <button class="btn primary" id="btn-modal-save-columns">保存</button>
+          <button class="btn" data-close>取消</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="modal-manual">
+      <div class="dialog">
+        <h3 id="modal-manual-title">数据项</h3>
+        <div id="modal-manual-body" class="row"></div>
+        <div class="actions">
+          <button class="btn primary" id="btn-modal-save-item">保存</button>
+          <button class="btn" data-close>取消</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="modal-import">
+      <div class="dialog">
+        <h3>本地导入</h3>
+        <p class="muted">
+          可下载模板（包含当前配置列字段），再选择导入方式。
+        </p>
+        <div class="actions">
+          <button class="btn" id="btn-download-template">下载Excel模板</button>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>选择文件（示例，不做实际解析）</label>
+            <input type="file" />
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="btn-import-full">全量导入</button>
+          <button class="btn" id="btn-import-incremental">增量导入</button>
+          <button class="btn" data-close>取消</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const pages = {
+        list: document.getElementById("page-list"),
+        add: document.getElementById("page-add"),
+        detail: document.getElementById("page-detail"),
+      };
+
+      const datasetTable = document.getElementById("dataset-table");
+      const columnConfigs = document.getElementById("column-configs");
+      const addName = document.getElementById("add-name");
+      const addDesc = document.getElementById("add-desc");
+
+      const detailHead = document.getElementById("detail-head");
+      const detailBody = document.getElementById("detail-body");
+      const detailTitle = document.getElementById("detail-title");
+      const detailMeta = document.getElementById("detail-meta");
+      const filterInput = document.getElementById("filter-input");
+
+      const modalConfig = document.getElementById("modal-config");
+      const modalConfigBody = document.getElementById("modal-config-body");
+      const modalManual = document.getElementById("modal-manual");
+      const modalManualBody = document.getElementById("modal-manual-body");
+      const modalManualTitle = document.getElementById("modal-manual-title");
+      const modalImport = document.getElementById("modal-import");
+
+      let currentDatasetId = null;
+      let manualEditItemId = null;
+
+      const now = () =>
+        new Date().toLocaleString("zh-CN", { hour12: false });
+
+      const datasets = [
+        {
+          id: "DS-1001",
+          name: "Prompt质量评测集",
+          description: "用于评估客服Prompt输出质量",
+          updatedAt: now(),
+          updatedBy: "王小明",
+          createdAt: now(),
+          latestVersion: "v1.2",
+          columns: [
+            { name: "input", type: "文本", view: "多行文本", desc: "用户输入" },
+            { name: "output", type: "文本", view: "多行文本", desc: "模型输出" },
+          ],
+          items: [
+            {
+              id: "ITEM-001",
+              values: {
+                input: "请总结下产品亮点",
+                output: "产品亮点包括稳定性与易用性...",
+              },
+              updatedAt: now(),
+            },
+          ],
+          versions: ["v1.0", "v1.1", "v1.2"],
+        },
+      ];
+
+      const types = ["文本", "数字", "枚举", "布尔"];
+      const views = ["单行文本", "多行文本", "标签", "代码"];
+
+      function showPage(key) {
+        Object.values(pages).forEach((page) => page.classList.remove("active"));
+        pages[key].classList.add("active");
+      }
+
+      function renderDatasetTable() {
+        datasetTable.innerHTML = "";
+        datasets.forEach((dataset) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${dataset.name}</td>
+            <td>${dataset.items.length}</td>
+            <td>${dataset.latestVersion}</td>
+            <td>${dataset.description || "-"}</td>
+            <td>${dataset.updatedAt}</td>
+            <td>${dataset.updatedBy}</td>
+            <td>${dataset.createdAt}</td>
+            <td>
+              <button class="btn ghost" data-detail="${dataset.id}">详情</button>
+              <button class="btn danger" data-delete="${dataset.id}">删除</button>
+            </td>
+          `;
+          datasetTable.appendChild(row);
+        });
+      }
+
+      function createColumnConfig(index, values = {}) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "config-row";
+        wrapper.innerHTML = `
+          <h4>列配置 ${index + 1}</h4>
+          <div class="row">
+            <div class="field">
+              <label>列名（必填）</label>
+              <input value="${values.name || ""}" data-field="name" />
+            </div>
+            <div class="field">
+              <label>类型</label>
+              <select data-field="type">
+                ${types
+                  .map(
+                    (type) =>
+                      `<option ${
+                        values.type === type ? "selected" : ""
+                      }>${type}</option>`
+                  )
+                  .join("")}
+              </select>
+            </div>
+            <div class="field">
+              <label>查看格式</label>
+              <select data-field="view">
+                ${views
+                  .map(
+                    (view) =>
+                      `<option ${
+                        values.view === view ? "selected" : ""
+                      }>${view}</option>`
+                  )
+                  .join("")}
+              </select>
+            </div>
+            <div class="field">
+              <label>描述</label>
+              <input value="${values.desc || ""}" data-field="desc" />
+            </div>
+          </div>
+        `;
+        return wrapper;
+      }
+
+      function initAddPage() {
+        columnConfigs.innerHTML = "";
+        addName.value = "";
+        addDesc.value = "";
+        columnConfigs.appendChild(
+          createColumnConfig(0, {
+            name: "input",
+            type: "文本",
+            view: "多行文本",
+            desc: "",
+          })
+        );
+        columnConfigs.appendChild(
+          createColumnConfig(1, {
+            name: "output",
+            type: "文本",
+            view: "多行文本",
+            desc: "",
+          })
+        );
+      }
+
+      function collectColumns(container) {
+        const configs = [...container.querySelectorAll(".config-row")];
+        return configs.map((row) => {
+          const fields = row.querySelectorAll("[data-field]");
+          const result = {};
+          fields.forEach((field) => {
+            result[field.dataset.field] = field.value.trim();
+          });
+          return result;
+        });
+      }
+
+      function openDetail(datasetId) {
+        currentDatasetId = datasetId;
+        const dataset = datasets.find((d) => d.id === datasetId);
+        detailTitle.textContent = `评测集详情：${dataset.name}`;
+        detailMeta.textContent = `最新版本 ${dataset.latestVersion} · 更新于 ${dataset.updatedAt}`;
+        renderDetailTable(dataset);
+        showPage("detail");
+      }
+
+      function renderDetailTable(dataset) {
+        const keyword = filterInput.value.trim();
+        detailHead.innerHTML = "";
+        detailBody.innerHTML = "";
+        const headCells = [
+          "唯一ID",
+          ...dataset.columns.map((col) => col.name),
+          "更新时间",
+          "操作",
+        ];
+        headCells.forEach((cell) => {
+          const th = document.createElement("th");
+          th.textContent = cell;
+          detailHead.appendChild(th);
+        });
+
+        dataset.items
+          .filter((item) => {
+            if (!keyword) return true;
+            return Object.values(item.values)
+              .join(" ")
+              .includes(keyword);
+          })
+          .forEach((item) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${item.id}</td>
+              ${dataset.columns
+                .map((col) => `<td>${item.values[col.name] || "-"}</td>`)
+                .join("")}
+              <td>${item.updatedAt}</td>
+              <td>
+                <button class="btn ghost" data-edit-item="${
+                  item.id
+                }">修改</button>
+                <button class="btn danger" data-delete-item="${
+                  item.id
+                }">删除</button>
+              </td>
+            `;
+            detailBody.appendChild(row);
+          });
+      }
+
+      function showModal(modal) {
+        modal.classList.add("active");
+      }
+
+      function hideModal(modal) {
+        modal.classList.remove("active");
+      }
+
+      document.getElementById("btn-add-page").addEventListener("click", () => {
+        initAddPage();
+        showPage("add");
+      });
+
+      document
+        .getElementById("btn-cancel-dataset")
+        .addEventListener("click", () => {
+          showPage("list");
+        });
+
+      document
+        .getElementById("btn-add-column")
+        .addEventListener("click", () => {
+          const count = columnConfigs.children.length;
+          columnConfigs.appendChild(createColumnConfig(count));
+        });
+
+      document
+        .getElementById("btn-submit-dataset")
+        .addEventListener("click", () => {
+          const name = addName.value.trim();
+          if (!name) {
+            alert("评测集名称为必填");
+            return;
+          }
+          const columns = collectColumns(columnConfigs);
+          if (columns.some((col) => !col.name)) {
+            alert("请填写所有列名");
+            return;
+          }
+          const dataset = {
+            id: `DS-${Date.now()}`,
+            name,
+            description: addDesc.value.trim(),
+            updatedAt: now(),
+            updatedBy: "当前用户",
+            createdAt: now(),
+            latestVersion: "v1.0",
+            columns,
+            items: [],
+            versions: ["v1.0"],
+          };
+          datasets.unshift(dataset);
+          renderDatasetTable();
+          openDetail(dataset.id);
+        });
+
+      datasetTable.addEventListener("click", (event) => {
+        const detailId = event.target.dataset.detail;
+        const deleteId = event.target.dataset.delete;
+        if (detailId) {
+          openDetail(detailId);
+        }
+        if (deleteId) {
+          const idx = datasets.findIndex((d) => d.id === deleteId);
+          if (idx >= 0 && confirm("确认删除该评测集？")) {
+            datasets.splice(idx, 1);
+            renderDatasetTable();
+          }
+        }
+      });
+
+      detailBody.addEventListener("click", (event) => {
+        const editId = event.target.dataset.editItem;
+        const deleteId = event.target.dataset.deleteItem;
+        const dataset = datasets.find((d) => d.id === currentDatasetId);
+        if (editId) {
+          const item = dataset.items.find((row) => row.id === editId);
+          manualEditItemId = editId;
+          openManualModal(dataset, item);
+        }
+        if (deleteId) {
+          if (confirm("确认删除该数据项？")) {
+            dataset.items = dataset.items.filter((row) => row.id !== deleteId);
+            renderDetailTable(dataset);
+          }
+        }
+      });
+
+      document.getElementById("btn-back-list").addEventListener("click", () => {
+        renderDatasetTable();
+        showPage("list");
+      });
+
+      filterInput.addEventListener("input", () => {
+        const dataset = datasets.find((d) => d.id === currentDatasetId);
+        renderDetailTable(dataset);
+      });
+
+      document
+        .getElementById("btn-config-columns")
+        .addEventListener("click", () => {
+          const dataset = datasets.find((d) => d.id === currentDatasetId);
+          modalConfigBody.innerHTML = "";
+          dataset.columns.forEach((col, index) => {
+            modalConfigBody.appendChild(createColumnConfig(index, col));
+          });
+          showModal(modalConfig);
+        });
+
+      document
+        .getElementById("btn-modal-add-column")
+        .addEventListener("click", () => {
+          const count = modalConfigBody.children.length;
+          modalConfigBody.appendChild(createColumnConfig(count));
+        });
+
+      document
+        .getElementById("btn-modal-save-columns")
+        .addEventListener("click", () => {
+          const dataset = datasets.find((d) => d.id === currentDatasetId);
+          const columns = collectColumns(modalConfigBody);
+          if (columns.some((col) => !col.name)) {
+            alert("请填写所有列名");
+            return;
+          }
+          dataset.columns = columns;
+          dataset.updatedAt = now();
+          dataset.latestVersion = dataset.latestVersion;
+          hideModal(modalConfig);
+          renderDetailTable(dataset);
+        });
+
+      function openManualModal(dataset, item = null) {
+        modalManualBody.innerHTML = "";
+        modalManualTitle.textContent = item ? "数据项编辑" : "数据项1";
+        dataset.columns.forEach((col) => {
+          const field = document.createElement("div");
+          field.className = "field";
+          field.innerHTML = `
+            <label>${col.name}</label>
+            <input value="${item ? item.values[col.name] || "" : ""}" data-col="${
+            col.name
+          }" />
+          `;
+          modalManualBody.appendChild(field);
+        });
+        showModal(modalManual);
+      }
+
+      document.getElementById("btn-add-manual").addEventListener("click", () => {
+        manualEditItemId = null;
+        const dataset = datasets.find((d) => d.id === currentDatasetId);
+        openManualModal(dataset);
+      });
+
+      document.getElementById("btn-modal-save-item").addEventListener("click", () => {
+        const dataset = datasets.find((d) => d.id === currentDatasetId);
+        const inputs = modalManualBody.querySelectorAll("[data-col]");
+        const values = {};
+        inputs.forEach((input) => {
+          values[input.dataset.col] = input.value.trim();
+        });
+        if (manualEditItemId) {
+          const item = dataset.items.find((row) => row.id === manualEditItemId);
+          item.values = values;
+          item.updatedAt = now();
+        } else {
+          dataset.items.push({
+            id: `ITEM-${String(dataset.items.length + 1).padStart(3, "0")}`,
+            values,
+            updatedAt: now(),
+          });
+        }
+        dataset.updatedAt = now();
+        hideModal(modalManual);
+        renderDetailTable(dataset);
+      });
+
+      document.getElementById("btn-add-import").addEventListener("click", () => {
+        showModal(modalImport);
+      });
+
+      document
+        .getElementById("btn-download-template")
+        .addEventListener("click", () => {
+          const dataset = datasets.find((d) => d.id === currentDatasetId);
+          const header = dataset.columns.map((col) => col.name).join(",");
+          const blob = new Blob([header], { type: "text/csv;charset=utf-8;" });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `${dataset.name}-模板.csv`;
+          link.click();
+          URL.revokeObjectURL(url);
+        });
+
+      document.getElementById("btn-import-full").addEventListener("click", () => {
+        alert("已模拟全量导入");
+        hideModal(modalImport);
+      });
+
+      document
+        .getElementById("btn-import-incremental")
+        .addEventListener("click", () => {
+          alert("已模拟增量导入");
+          hideModal(modalImport);
+        });
+
+      document
+        .getElementById("btn-submit-version")
+        .addEventListener("click", () => {
+          const dataset = datasets.find((d) => d.id === currentDatasetId);
+          const nextVersion = `v${dataset.versions.length + 1}.0`;
+          dataset.versions.push(nextVersion);
+          dataset.latestVersion = nextVersion;
+          dataset.updatedAt = now();
+          alert(`已提交版本 ${nextVersion}`);
+          renderDetailTable(dataset);
+        });
+
+      document.addEventListener("click", (event) => {
+        if (event.target.matches("[data-close]")) {
+          hideModal(event.target.closest(".modal"));
+        }
+      });
+
+      const dropdown = document.getElementById("add-data-dropdown");
+      dropdown.addEventListener("click", (event) => {
+        event.stopPropagation();
+        dropdown.classList.toggle("open");
+      });
+      document.addEventListener("click", () => dropdown.classList.remove("open"));
+
+      renderDatasetTable();
+      initAddPage();
+    </script>
+  </body>
+</html>
